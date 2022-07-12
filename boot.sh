@@ -11,10 +11,10 @@ echo "remove all log..."
 rm -rf *log*
 
 echo "install requirements"
-/opt/python3.9.7/bin/python3.9 -m pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+/opt/python3.10.2/bin/python3.10 -m pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 
-echo "copy api.ini to /home/mooc/supervisord.d"
-cp api.ini /home/mooc/supervisord.d
+echo "copy api.ini to /var/app/conf/supervisord.d"
+cp config/api.ini /var/app/conf/supervisord.d
 
 echo "start service"
 supervisorctl update && supervisorctl restart api

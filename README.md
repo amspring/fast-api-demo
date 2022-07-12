@@ -79,11 +79,20 @@ cp config/config.dev.yml config.yml
     aerich heads
 ```
 
-#### 开发环境启动
+#### 开发环境
 ```shell
 python cmd.py 
 or 
 uvicorn cmd:app --reload --host 0.0.0.0 --port 8888
+```
+
+####  生产环境
+```text
+cd /path/demo
+touch .env
+echo "PROJECT_ENV=\"dev\"" > .env
+chmod +x boot.sh
+. boot.sh
 ```
 
 #### model 相关文档:
