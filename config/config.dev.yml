@@ -1,0 +1,11 @@
+app:
+  debug: false
+  version: "1.0.0"
+  name: "app server api"
+  description: "app server api"
+  prefix: "/api/v1"
+  host: "0.0.0.0"
+  address: "127.0.0.1"
+  port: 8888
+
+mariadb: "mysql://{user_name}:{password}@{host}:{port}/{db_name}?charset=utf8mb4"
