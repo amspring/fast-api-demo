@@ -8,7 +8,7 @@
 # Remarks  :
 from typing import Optional
 
-from pydantic import BaseModel, Field, constr, validator, conint
+from pydantic import BaseModel, Field, constr, conint
 
 """Field
 default: （位置参数）字段的默认值。由于Field替换了字段的默认值，因此第一个参数可用于设置默认值。使用省略号 ( …) 表示该字段为必填项。
@@ -41,13 +41,13 @@ class SearchIn(BaseModel):
     username__icontains: Optional[str] = Field(default=None, alias="name")
 
 
-class CarouselAdd(BaseModel):
+class CarouselAddIn(BaseModel):
     url: str
     cover: str
     user_id: int
 
 
-class CarouselUpdate(BaseModel):
+class CarouselUpdateIn(BaseModel):
     url: str = None
 
 
@@ -55,3 +55,25 @@ class UserAddIn(BaseModel):
     username: str
     mobile: Optional[str] = Field(min_length=11, max_length=11, default='')
     password: constr(min_length=8, max_length=32)
+
+
+class UserUpdateIn(BaseModel):
+    username: str = None
+    avatar: str = None
+    email: str = None
+    gender: int = None
+
+
+class PasswordUpdateIn(BaseModel):
+    password: str
+    conf_password: str
+    user_id: int
+
+
+class LoginIn(BaseModel):
+    password: str
+    unique_id: str = Field(default=..., alias="login")
+
+
+class LoginAddIn(LoginIn):
+    user_id: int

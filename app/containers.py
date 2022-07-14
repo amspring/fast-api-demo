@@ -8,8 +8,9 @@
 # Remarks  :
 from dependency_injector import containers, providers
 
-from .services import CarouselService, UserService
-from .repositories import CarouselRepository, UserRepository
+from .redis import init_redis
+from .services import CarouselService, UserService, LoginService
+from .repositories import CarouselRepository, UserRepository, LoginRepository
 
 
 class Container(containers.DeclarativeContainer):
@@ -18,6 +19,8 @@ class Container(containers.DeclarativeContainer):
 
     config = providers.Configuration()
 
+    _redis_client = providers.Resource(init_redis)
+
     # 用户
     _user_repository = providers.Factory(UserRepository)
     user_service = providers.Factory(UserService, user_repository=_user_repository)
@@ -25,3 +28,8 @@ class Container(containers.DeclarativeContainer):
     # 轮播
     _carousel_repository = providers.Factory(CarouselRepository)
     carousel_service = providers.Factory(CarouselService, carousel_repository=_carousel_repository)
+
+    # 登录
+    _login_repository = providers.Factory(LoginRepository)
+    login_service = providers.Factory(LoginService, redis_client=_redis_client, login_repository=_login_repository,
+                                      user_repository=_user_repository)

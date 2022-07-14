@@ -24,7 +24,7 @@ class CarouselRepository:
         pass
 
     @staticmethod
-    async def get_carousel_list(page, per_page, args):
+    async def rep_carousel_list(page, per_page, args):
         """
         Args:
             page:
@@ -54,7 +54,7 @@ class CarouselRepository:
             )
 
     @staticmethod
-    async def carousel_detail(_id):
+    async def rep_get_carousel(_id):
         """
         Args:
             _id:
@@ -70,7 +70,7 @@ class CarouselRepository:
             )
 
     @staticmethod
-    async def carousel_add(args):
+    async def rep_add_carousel(args):
         """
         Args:
             args:
@@ -85,7 +85,7 @@ class CarouselRepository:
             )
 
     @staticmethod
-    async def carousel_update(_id, args):
+    async def rep_update_carousel(_id, args):
         """
         Args:
             _id:
@@ -101,7 +101,7 @@ class CarouselRepository:
             )
 
     @staticmethod
-    async def carousel_delete(_id):
+    async def rep_delete_carousel(_id):
         """
         软删除
         Args:
@@ -120,7 +120,7 @@ class CarouselRepository:
             )
 
     @staticmethod
-    async def carousel_hard_delete(_id):
+    async def rep_hard_delete_carousel(_id):
         """
         硬删除
         Args:

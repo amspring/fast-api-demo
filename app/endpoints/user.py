@@ -12,8 +12,8 @@ from fastapi import APIRouter, Depends
 from ..resp import resp_200
 from ..containers import Container
 from ..services import UserService
-from ..schemas import PageMixin, SearchIn, UserAddIn
-from ..utils import verify_token
+from ..schemas import PageMixin, SearchIn, UserAddIn, UserUpdateIn
+from ..security import verify_token, get_header_token
 
 router = APIRouter()
 
@@ -36,16 +36,32 @@ async def f(pagination: PageMixin = Depends(PageMixin),
     return resp_200(data=result)
 
 
+@router.get("/user/{_id}")
+@inject
+async def f(_id: int,
+            service: UserService = Depends(Provide[Container.user_service])):
+    """
+    详情
+    Args:
+        _id:
+        service:
+    Returns:
+    """
+    result = await service.get_user(_id)
+
+    return resp_200(data=result)
+
+
 @router.post("/user")
 @inject
 async def f(args: UserAddIn,
-            # token: dict = Depends(verify_token),
+            auth: dict = Depends(verify_token),
             service: UserService = Depends(Provide[Container.user_service])):
     """
     添加
     Args:
         args:
-        # token:
+        auth:
         service:
     Returns:
     """
@@ -55,3 +71,59 @@ async def f(args: UserAddIn,
     result = await service.add_user(args.dict(exclude_none=True))
 
     return resp_200(data={"id": result})
+
+
+@router.put("/user/{_id}")
+@inject
+async def f(_id: int,
+            args: UserUpdateIn,
+            auth: dict = Depends(verify_token),
+            service: UserService = Depends(Provide[Container.user_service])):
+    """
+    修改
+    Args:
+        auth:
+        _id:
+        args:
+        service:
+    Returns:
+    """
+    result = await service.update_user(_id, args.dict(exclude_none=True))
+
+    return resp_200(data={"update_total": result})
+
+
+@router.delete("/user/{_id}")
+@inject
+async def f(_id: int,
+            auth: dict = Depends(verify_token),
+            service: UserService = Depends(Provide[Container.user_service])):
+    """
+    删除
+    Args:
+        auth:
+        _id:
+        service:
+    Returns:
+    """
+    result = await service.delete_user(_id)
+
+    return resp_200(data={"delete_total": result})
+
+
+@router.get("/myself")
+@inject
+async def f(auth: dict = Depends(verify_token),
+            token: str = Depends(get_header_token),
+            service: UserService = Depends(Provide[Container.user_service])):
+    """
+    用户详情
+    Args:
+        auth:
+        token:
+        service:
+    Returns:
+    """
+    result = await service.myself(auth.get("id"))
+
+    return resp_200(data=result)

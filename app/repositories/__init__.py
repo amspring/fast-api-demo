@@ -8,5 +8,6 @@
 # Remarks  :
 from .carousel import CarouselRepository
 from .user import UserRepository
+from .login import LoginRepository
 
-__all__ = ["CarouselRepository", "UserRepository"]
+__all__ = ["CarouselRepository", "UserRepository", "LoginRepository"]

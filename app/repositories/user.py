@@ -5,11 +5,11 @@
 # Email    : chenshuchuan@xroom.net
 # Date     : 2022-07-12 13:57
 # Remarks  :
-from datetime import datetime
 from tortoise.queryset import Q
+from tortoise.transactions import in_transaction
 
 from ..utils import YesOrNo
-from ..models import User
+from ..models import User, Login
 from ..exceptions import RepositoriesError
 
 
@@ -24,7 +24,7 @@ class UserRepository:
         pass
 
     @staticmethod
-    async def get_user_list(page, per_page, args):
+    async def rep_user_list(page, per_page, args):
         """
         Args:
             page:
@@ -48,16 +48,83 @@ class UserRepository:
             )
 
     @staticmethod
-    async def user_add(args):
+    async def rep_get_user(user_id):
+        """
+        Args:
+            user_id:
+        Returns:
+        """
+        try:
+            user = await User.filter(Q(pk=user_id)).first()
+            return user
+        except Exception as err:
+            raise RepositoriesError(
+                message=f"Get User exception: {str(err)}", code=400
+            )
+
+    @staticmethod
+    async def rep_add_user(args):
         """
         Args:
             args:
         Returns:
         """
+        async with in_transaction("default") as conn:
+            try:
+                # 用户添加
+                user = await User.create(**args, using_db=conn)
+
+                # 关联登录
+                await Login.create(user=user, unique_id=args.get("mobile"), using_db=conn)
+
+                return user.id
+            except Exception as err:
+                raise RepositoriesError(
+                    message=f"Add user exception: {str(err)}", code=400
+                )
+
+    @staticmethod
+    async def rep_update_user(_id, args):
+        """
+        Args:
+            _id:
+            args:
+        Returns:
+        """
         try:
-            result = await User.create(**args)
-            return result.id
+            update_total = await User.filter(Q(pk=_id)).update(**args)
+            return update_total
         except Exception as err:
             raise RepositoriesError(
-                message=f"Add user exception: {str(err)}", code=400
+                message=f"Update user exception: {str(err)}", code=400
+            )
+
+    @staticmethod
+    async def rep_delete_user(_id):
+        """
+        Args:
+            _id:
+        Returns:
+        """
+        try:
+            total = await User.filter(Q(pk=_id)).delete()
+            return total
+        except Exception as err:
+            raise RepositoriesError(
+                message=f"Delete User exception: {str(err)}", code=400
+            )
+
+    @staticmethod
+    async def rep_check_user(_id):
+        """
+        Args:
+            _id:
+        Returns:
+        """
+        try:
+            flag = await User.filter(Q(pk=_id)).exists()
+            return flag
+        except Exception as err:
+            raise RepositoriesError(
+                message=f"Check User exist exception: {str(err)}", code=400
             )

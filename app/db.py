@@ -5,9 +5,10 @@
 # Email    : chenshuchuan@xroom.net
 # Date     : 2022-07-12 10:25
 # Remarks  :
-from .conf import settings
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
+
+from .conf import settings
 
 TORTOISE_ORM = {
     'connections': {'default': settings.mariadb},
@@ -35,6 +36,6 @@ def register_db(app: FastAPI) -> None:
     register_tortoise(
         app,
         config=TORTOISE_ORM,
-        generate_schemas=False,
-        add_exception_handlers=True,
+        generate_schemas=settings.app.debug,
+        add_exception_handlers=settings.app.debug
     )

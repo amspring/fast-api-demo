@@ -12,8 +12,9 @@ from fastapi import APIRouter, Depends, Request
 from ..resp import resp_200
 from ..containers import Container
 from ..services import CarouselService
-from ..schemas import PageMixin, SearchIn, IdMixin, CarouselAdd, CarouselUpdate
+from ..schemas import PageMixin, SearchIn, CarouselAddIn, CarouselUpdateIn
 from ..conf import settings
+from ..security import verify_token
 
 router = APIRouter()
 
@@ -48,18 +49,18 @@ async def f(pagination: PageMixin = Depends(PageMixin),
     return resp_200(data=result)
 
 
-@router.get("/carousel/get")
+@router.get("/carousel/{_id}")
 @inject
-async def f(args: IdMixin = Depends(IdMixin),
+async def f(_id: int,
             service: CarouselService = Depends(Provide[Container.carousel_service])):
     """
     详情
     Args:
-        args:
+        _id:
         service:
     Returns:
     """
-    result = await service.carousel_detail(args.id)
+    result = await service.carousel_detail(_id)
 
     return resp_200(data=result)
 
@@ -67,11 +68,13 @@ async def f(args: IdMixin = Depends(IdMixin),
 @router.post("/carousel")
 @inject
 async def f(request: Request,
-            args: CarouselAdd,
+            args: CarouselAddIn,
+            auth: dict = Depends(verify_token),
             service: CarouselService = Depends(Provide[Container.carousel_service])):
     """
     添加
     Args:
+        auth:
         request:
         args:
         service:
@@ -88,11 +91,13 @@ async def f(request: Request,
 @router.put("/carousel/{_id}")
 @inject
 async def f(_id: int,
-            args: CarouselUpdate,
+            args: CarouselUpdateIn,
+            auth: dict = Depends(verify_token),
             service: CarouselService = Depends(Provide[Container.carousel_service])):
     """
     修改
     Args:
+        auth:
         _id:
         args:
         service:
@@ -106,10 +111,12 @@ async def f(_id: int,
 @router.delete("/carousel/{_id}")
 @inject
 async def f(_id: int,
+            auth: dict = Depends(verify_token),
             service: CarouselService = Depends(Provide[Container.carousel_service])):
     """
     删除
     Args:
+        auth:
         _id:
         service:
     Returns:

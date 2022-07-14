@@ -8,5 +8,6 @@
 # Remarks  :
 from .carousel import CarouselService
 from .user import UserService
+from .login import LoginService
 
-__all__ = ["CarouselService", "UserService"]
+__all__ = ["CarouselService", "UserService", "LoginService"]

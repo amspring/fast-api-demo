@@ -34,7 +34,7 @@ class CarouselService:
         Returns:
         """
 
-        results, total = await self._repository.get_carousel_list(pagination.page, pagination.per_page, args)
+        results, total = await self._repository.rep_carousel_list(pagination.page, pagination.per_page, args)
         _result = [self._carousel(result) for result in results]
 
         return {
@@ -49,7 +49,7 @@ class CarouselService:
             _id:
         Returns:
         """
-        result = await self._repository.carousel_detail(_id)
+        result = await self._repository.rep_get_carousel(_id)
 
         if not result:
             return {}
@@ -63,7 +63,7 @@ class CarouselService:
             args:
         Returns:
         """
-        result = await self._repository.carousel_add(args)
+        result = await self._repository.rep_add_carousel(args)
 
         return result
 
@@ -75,7 +75,7 @@ class CarouselService:
             args:
         Returns:
         """
-        result = await self._repository.carousel_update(_id, args)
+        result = await self._repository.rep_update_carousel(_id, args)
 
         return result
 
@@ -86,6 +86,6 @@ class CarouselService:
             _id:
         Returns:
         """
-        result = await self._repository.carousel_delete(_id)
+        result = await self._repository.rep_hard_delete_carousel(_id)
 
         return result

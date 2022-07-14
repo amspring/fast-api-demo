@@ -1,5 +1,5 @@
 app:
-  debug: false
+  debug: False
   version: "1.0.0"
   name: "app server api"
   description: "app server api"
@@ -9,3 +9,4 @@ app:
   port: 8888
 
 mariadb: "mysql://{user_name}:{password}@{host}:{port}/{db_name}?charset=utf8mb4"
+redis: "redis://:{password}@{host}:{port}/{db}?encoding=utf-8"

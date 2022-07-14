@@ -8,7 +8,7 @@
 from fastapi import FastAPI
 
 from ..conf import settings
-from . import carousel, user
+from . import carousel, user, login
 
 
 def register_router(app: FastAPI) -> None:
@@ -20,3 +20,4 @@ def register_router(app: FastAPI) -> None:
     """
     app.include_router(carousel.router, prefix=settings.app.prefix)
     app.include_router(user.router, prefix=settings.app.prefix)
+    app.include_router(login.router, prefix=settings.app.prefix)

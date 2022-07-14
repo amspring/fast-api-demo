@@ -8,14 +8,25 @@
 # Remarks  :
 import base64
 import datetime
+
 from typing import Union
-
 from fastapi import Request
-from enum import IntEnum
-
+from enum import IntEnum, unique
 from tortoise.queryset import QuerySet
 
 
+@unique
+class Gender(IntEnum):
+    """性别"""
+    # 女
+    FEMALE = 0
+    # 男
+    MALE = 1
+    # 保密
+    SECRET = 2
+
+
+@unique
 class YesOrNo(IntEnum):
     """是否可用"""
 
