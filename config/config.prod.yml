@@ -10,3 +10,23 @@ app:
 
 mariadb: "mysql://{user_name}:{password}@{host}:{port}/{db_name}?charset=utf8mb4"
 redis: "redis://:{password}@{host}:{port}/{db}?encoding=utf-8"
+
+expires: &exp
+  # 5分钟
+  S_5: 300
+  # 20分钟
+  S_20: 1200
+  # 2小时
+  H_2: 7200
+  # 2天
+  D_2: 172800
+  # 7天
+  D_7: 604800
+  # 一个月
+  M_1: 18144000
+
+auth:
+  secret_key: "qC1!fK0)aC0*eC0!cD5@eP0%aB4+iA0@"
+  token_type: "Bearer"
+  algorithm: "HS256"
+  <<: *exp
